@@ -1,6 +1,6 @@
 [Project]
-FileName=PacMan.dev
-Name=PacMan
+FileName=PacManFeature.dev
+Name=PacManFeature
 Type=1
 Ver=2
 ObjFiles=
@@ -27,9 +27,8 @@ CommandLine=
 Folders=
 IncludeVersionInfo=0
 SupportXPThemes=0
-CompilerSet=0
-CompilerSettings=0000000000000000000000000
-UnitCount=1
+CompilerSet=3
+CompilerSettings=0000000100000000000000000
 
 [VersionInfo]
 Major=1
@@ -49,14 +48,4 @@ ProductName=
 ProductVersion=
 AutoIncBuildNr=0
 SyncProduct=1
-
-[Unit1]
-FileName=Untitled1.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
 
