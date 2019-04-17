@@ -2,17 +2,66 @@
 #include<graphics.h>
 void initMap();
 int main()
+#define ROW 579
+#define COLUMN 579
 {    
 	int x1=21,y1=21,x2=41,y2=41,i;
 	int ek=20;
-	char tus;
-
+	char button,tus;
+	int centerX,centerY;
 	initMap();
-
 	
-	setcolor(WHITE);
-	rectangle(x1,y1,x2,y2);        
-	while(1)
+	
+	
+	
+	
+	
+
+	while(1){
+		button = getch();
+		
+		setcolor(BLACK);
+		
+		rectangle(x1,y1,x2,y2);
+		
+		setcolor(BLACK);
+		setfillstyle(SOLID_FILL,0);
+		bar(x1+1,y1+1,x2,y2);
+		
+		centerX = (x1+x2)/2;
+		centerY = (y1+y2)/2;
+		switch(button){
+			case 27:
+				exit(0);
+			case 77: //right
+				if(getpixel(centerX+ek,centerY)!=1){
+					x1+=ek;
+					x2+=ek;
+				}break;
+			case 75: //left
+				if(getpixel(centerX-ek,centerY)!=1){
+					x1-=ek;
+					x2-=ek;
+				}break;				
+			case 72: //up
+				if(getpixel(centerX,centerY-ek)!=1){
+					y1-=ek;
+					y2-=ek;
+				}break;
+			case 80: //down
+				if(getpixel(centerX,centerY+ek)!=1){
+					y1+=ek;
+					y2+=ek;
+				}break;
+		}
+		setcolor(WHITE);
+		rectangle(x1,y1,x2,y2);
+
+			
+		
+	}
+	      
+/*	while(1)
 	{      	      
 		tus= getch();
 		if(tus==27) exit(0);
@@ -51,22 +100,25 @@ int main()
 				y2+=ek;  
 			}
 		}
+		
 		setcolor(WHITE);
 		rectangle(x1,y1,x2,y2);
-		printf("x1=%d,y1=%d",x1,y1);
+		//printf("x1=%d,y1=%d",x1,y1);
+		printf("%d",getpixel((x1+x2)/2,(y1+y2)/2));
+		
 		}
 
-	}
+	}*/
 	closegraph();
 
 	return 0;
 }
 
 void initMap(){
-	initwindow(579,579); 
+	initwindow(ROW,COLUMN); 
 	setcolor(BLUE);
     setfillstyle(1,1);
-	
+	int i,j;
 	
 	bar(542,10,552,552);
   	rectangle(542,10,552,552);
@@ -159,5 +211,71 @@ void initMap(){
 	rectangle(480,82,282,220);
 	bar(282,480,480,322);
 	rectangle(282,480,480,322);
+	
+	
+	//feed
+	setfillstyle(14,14);
+    fillellipse(31,31,5,5);
+    for(i=31;i<559;i=i+20){
+    	for(j=31;j<559;j=j+20){
+    		if(getpixel(i,j)!=1){
+    			fillellipse(i,j,5,5);
+			}
+		}
+	}
+	//circle(31,31,5);
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	bar(339,243,163,299);
+	
+	setcolor(YELLOW);
+	setfillstyle(SOLID_FILL,14);
+	fillellipse(34,31,10,10);
+	int arr1[]={34,31,44,21,44,41,34,31};
+	int arr2[]={34,31,44,26,44,36,34,31};
+	int arr3[]={34,31,44,29,44,33,34,31};
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	fillpoly(4,arr3);
+/*	
+	while(1){
+		for(i=0;i<2;i++){
+			delay(50);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(34,31,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr3);		
+			}		
+		}
+		for(i=0;i<2;i++){
+			delay(50);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(34,31,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr1);		
+			}			
+		}
+		
+		
+	}*/
+	
+	
+	
 }
 
