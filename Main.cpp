@@ -1,33 +1,34 @@
 #include<conio.h>
 #include<graphics.h>
-void initMap();
-int main()
 #define ROW 579
 #define COLUMN 579
-{    
+void initMap();
+void pacManMovementRight(int centerX,int centerY);
+void pacManMovementLeft(int centerX,int centerY);
+void pacManMovementUp(int centerX,int centerY);
+void pacManMovementDown(int centerX,int centerY);
+
+int main(){    
 	int x1=21,y1=21,x2=41,y2=41,i;
 	int ek=20;
 	char button,tus;
 	int centerX,centerY;
 	initMap();
-	
-	
-	
-	
-	
+	int destination=4;
 	
 
 	while(1){
-		button = getch();
+		
+	 button = getch();
 		
 		setcolor(BLACK);
 		
-		rectangle(x1,y1,x2,y2);
+		rectangle(x1,y1,x2,y2);  //there is a problemmm !!!!!!!
 		
 		setcolor(BLACK);
 		setfillstyle(SOLID_FILL,0);
 		bar(x1+1,y1+1,x2,y2);
-		
+	
 		centerX = (x1+x2)/2;
 		centerY = (y1+y2)/2;
 		switch(button){
@@ -37,78 +38,44 @@ int main()
 				if(getpixel(centerX+ek,centerY)!=1){
 					x1+=ek;
 					x2+=ek;
-				}break;
+					destination=0;//to right
+				}
+				break;
 			case 75: //left
 				if(getpixel(centerX-ek,centerY)!=1){
 					x1-=ek;
 					x2-=ek;
+					destination=1;//to left
 				}break;				
 			case 72: //up
 				if(getpixel(centerX,centerY-ek)!=1){
 					y1-=ek;
 					y2-=ek;
+					destination=2;//to up
 				}break;
 			case 80: //down
 				if(getpixel(centerX,centerY+ek)!=1){
 					y1+=ek;
 					y2+=ek;
+					destination=3;//to down
 				}break;
+			default : break;
 		}
-		setcolor(WHITE);
-		rectangle(x1,y1,x2,y2);
+		centerX = (x1+x2)/2;
+		centerY = (y1+y2)/2;
+		switch(destination){
+			case 0: pacManMovementRight(centerX,centerY);break;
+			case 1: pacManMovementLeft(centerX,centerY);break;
+			case 2: pacManMovementUp(centerX,centerY);break;
+			case 3: pacManMovementDown(centerX,centerY);break;
+			default : break;
+		}
+		destination=4;
 
 			
 		
 	}
 	      
-/*	while(1)
-	{      	      
-		tus= getch();
-		if(tus==27) exit(0);
-		else 
-		{   
-		setcolor(BLACK);
-		rectangle(x1,y1,x2,y2);
-		if(tus==77) //right
-		{ 
-			if(x2+ek<542){
-				x1+=ek; 
-				x2+=ek; 
-			}
-		}
-		else if(tus==75)//left
-		{
-			if(x1-ek >20){
-			
-				x1-=ek; 
-				x2-=ek; 
-			}	
-		}
-		else if(tus==72)//up
-		{
-			if(y1-ek > 20){
-			
-				y1-=ek; 
-				y2-=ek;
-			}
-		}
-		else if(tus==80)//down
-		{
-			if(y2+ek<542){
-			
-				y1+=ek; 
-				y2+=ek;  
-			}
-		}
-		
-		setcolor(WHITE);
-		rectangle(x1,y1,x2,y2);
-		//printf("x1=%d,y1=%d",x1,y1);
-		printf("%d",getpixel((x1+x2)/2,(y1+y2)/2));
-		
-		}
-
-	}*/
 	closegraph();
 
 	return 0;
@@ -276,6 +243,189 @@ void initMap(){
 	}*/
 	
 	
+	
+}
+void pacManMovementRight(int centerX,int centerY){
+	int arr1[]={centerX,centerY,centerX+10,centerY-10,centerX+10,centerY+10,centerX,centerY};
+	int arr2[]={centerX,centerY,centerX+10,centerY-5, centerX+10,centerY+5, centerX,centerY};
+	int arr3[]={centerX,centerY,centerX+10,centerY-2, centerX+10,centerY+2, centerX,centerY};
+	int i;
+	setcolor(YELLOW);
+	setfillstyle(SOLID_FILL,14);
+	fillellipse(centerX,centerY,10,10);
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	fillpoly(4,arr3);
+	
+	for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr3);		
+			}		
+		}
+		for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr1);		
+			}			
+		}
+	
+}
+void pacManMovementLeft(int centerX,int centerY){
+	int arr1[]={centerX,centerY,centerX-10,centerY-10,centerX-10,centerY+10,centerX,centerY};
+	int arr2[]={centerX,centerY,centerX-10,centerY-5, centerX-10,centerY+5, centerX,centerY};
+	int arr3[]={centerX,centerY,centerX-10,centerY-2, centerX-10,centerY+2, centerX,centerY};
+	int i;
+	setcolor(YELLOW);
+	setfillstyle(SOLID_FILL,14);
+	fillellipse(centerX,centerY,10,10);
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	fillpoly(4,arr3);
+	
+	for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr3);		
+			}		
+		}
+		for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr1);		
+			}			
+		}
+	
+}
+void pacManMovementUp(int centerX,int centerY){
+	int arr1[]={centerX,centerY,centerX-10,centerY-10, centerX+10,centerY-10,centerX,centerY};
+	int arr2[]={centerX,centerY,centerX-5, centerY-10, centerX+5, centerY-10, centerX,centerY};
+	int arr3[]={centerX,centerY,centerX-2, centerY-10, centerX+2, centerY-10, centerX,centerY};
+	int i;
+	setcolor(YELLOW);
+	setfillstyle(SOLID_FILL,14);
+	fillellipse(centerX,centerY,10,10);
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	fillpoly(4,arr3);
+	for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr3);		
+			}		
+		}
+		for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr1);		
+			}			
+		}
+	
+}
+void pacManMovementDown(int centerX,int centerY){
+	int arr1[]={centerX,centerY,centerX-10,centerY+10, centerX+10,centerY+10,centerX,centerY};
+	int arr2[]={centerX,centerY,centerX-5, centerY+10, centerX+5, centerY+10, centerX,centerY};
+	int arr3[]={centerX,centerY,centerX-2, centerY+10, centerX+2, centerY+10, centerX,centerY};
+	int i;
+	setcolor(YELLOW);
+	setfillstyle(SOLID_FILL,14);
+	fillellipse(centerX,centerY,10,10);
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	fillpoly(4,arr3);
+	
+	for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr3);		
+			}		
+		}
+		for(i=0;i<2;i++){
+			delay(10);
+			setcolor(YELLOW);
+			setfillstyle(SOLID_FILL,14);
+			fillellipse(centerX,centerY,10,10);
+			if(i==0){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr2);		
+			}
+			if(i==1){			
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL,0);
+				fillpoly(4,arr1);		
+			}			
+		}
 	
 }
 
