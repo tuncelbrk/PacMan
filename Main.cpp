@@ -1,34 +1,43 @@
 #include<conio.h>
 #include<graphics.h>
+
+
+
 #define ROW 579
-#define COLUMN 579
-void initMap();
-void pacManMovementRight(int centerX,int centerY);
-void pacManMovementLeft(int centerX,int centerY);
-void pacManMovementUp(int centerX,int centerY);
-void pacManMovementDown(int centerX,int centerY);
+#define COLUMN 599
+#define MOVE 20
+
+
+
+int initMap();
+void pacManMovementRight(int centerX,int centerY,int toss);
+void pacManMovementLeft(int centerX,int centerY,int toss);
+void pacManMovementUp(int centerX,int centerY,int toss);
+void pacManMovementDown(int centerX,int centerY,int toss);
+void removeLastPlace(int centerX,int centerY);
+void scoreUpdate(int score);
 
 int main(){    
 	int x1=21,y1=21,x2=41,y2=41,i;
 	int ek=20;
 	char button,tus;
-	int centerX,centerY;
-	initMap();
+	int centerX,centerY;	
 	int destination=4;
+	int toss=0;
+	int score=0;
+	int font = 8;
+	int direction = 0;
+	int font_size = 5; 
+	int c;
+	score = initMap();
 	
 
+
 	while(1){
+	delay(50);	
+	button = getch();
 		
-	 button = getch();
-		
-		setcolor(BLACK);
-		
-		rectangle(x1,y1,x2,y2);  //there is a problemmm !!!!!!!
-		
-		setcolor(BLACK);
-		setfillstyle(SOLID_FILL,0);
-		bar(x1+1,y1+1,x2,y2);
-	
+
 		centerX = (x1+x2)/2;
 		centerY = (y1+y2)/2;
 		switch(button){
@@ -36,57 +45,102 @@ int main(){
 				exit(0);
 			case 77: //right
 				if(getpixel(centerX+ek,centerY)!=1){
+					if(getpixel(centerX+ek,centerY)==14){
+						score--;
+					}
 					x1+=ek;
 					x2+=ek;
-					destination=0;//to right
+								//to right
 				}
+				else{
+					toss=1;
+				}	
+				destination=0;
 				break;
 			case 75: //left
 				if(getpixel(centerX-ek,centerY)!=1){
+					if(getpixel(centerX-ek,centerY)==14){
+						score--;
+					}
 					x1-=ek;
 					x2-=ek;
-					destination=1;//to left
-				}break;				
+								//to left
+				}
+				else{
+					toss=1;
+				}	
+				destination=1;
+				break;				
 			case 72: //up
 				if(getpixel(centerX,centerY-ek)!=1){
+					if(getpixel(centerX,centerY-ek)==14){
+						score--;
+					}
 					y1-=ek;
 					y2-=ek;
-					destination=2;//to up
-				}break;
+									//to up
+				}
+				else{
+					toss=1;
+				}					
+				destination=2;
+				break;
 			case 80: //down
 				if(getpixel(centerX,centerY+ek)!=1){
+					if(getpixel(centerX,centerY+ek)==14){
+						score--;
+					}
 					y1+=ek;
 					y2+=ek;
-					destination=3;//to down
-				}break;
+									//to down
+				}
+				else{
+					toss=1;
+				}	
+				destination=3;
+				break;
 			default : break;
 		}
 		centerX = (x1+x2)/2;
 		centerY = (y1+y2)/2;
+		
 		switch(destination){
-			case 0: pacManMovementRight(centerX,centerY);break;
-			case 1: pacManMovementLeft(centerX,centerY);break;
-			case 2: pacManMovementUp(centerX,centerY);break;
-			case 3: pacManMovementDown(centerX,centerY);break;
+			case 0: pacManMovementRight(centerX,centerY,toss);break;
+			case 1: pacManMovementLeft(centerX,centerY,toss);break;
+			case 2: pacManMovementUp(centerX,centerY,toss);break;
+			case 3: pacManMovementDown(centerX,centerY,toss);break;
 			default : break;
 		}
 		destination=4;
-
-			
+		toss=0;
 		
+		scoreUpdate(score);
+		
+		if(score == 0){
+			break;
+		}
+	
 	}
-	      
+	cleardevice();
+	setcolor(RED);
+	settextstyle(font, direction, font_size);
+	outtextxy(ROW/3,COLUMN/2-50,"GAME OVER");
+    button = getch();
 	closegraph();
 
 	return 0;
 }
 
-void initMap(){
+int initMap(){
 	initwindow(ROW,COLUMN); 
 	setcolor(BLUE);
     setfillstyle(1,1);
 	int i,j;
-	
+	int score = 0;
+	int font = 8;
+	int direction = 0;
+	int font_size = 2;
+	char scoreChar[10];
 	bar(542,10,552,552);
   	rectangle(542,10,552,552);
   	bar(10,10,20,550);
@@ -103,7 +157,12 @@ void initMap(){
 	bar(242,501,260,519);
 	rectangle(242,501,260,519);
 	
+	bar(340,242,162,252);
+	bar(162,252,172,300);
+	bar(340,252,330,300);
+	bar(340,300,162,290);
 	rectangle(340,242,162,300);
+	bar(185,255,317,281);
 	
 	bar(480,262,362,280);
 	rectangle(480,262,362,280);
@@ -186,70 +245,46 @@ void initMap(){
     for(i=31;i<559;i=i+20){
     	for(j=31;j<559;j=j+20){
     		if(getpixel(i,j)!=1){
+    			score++;
     			fillellipse(i,j,5,5);
 			}
 		}
 	}
-	//circle(31,31,5);
 	setcolor(BLACK);
 	setfillstyle(SOLID_FILL,0);
-	bar(339,243,163,299);
+	bar(185,255,317,281);
 	
 	setcolor(YELLOW);
 	setfillstyle(SOLID_FILL,14);
-	fillellipse(34,31,10,10);
+	fillellipse(31,31,10,10);
 	int arr1[]={34,31,44,21,44,41,34,31};
 	int arr2[]={34,31,44,26,44,36,34,31};
 	int arr3[]={34,31,44,29,44,33,34,31};
 	setcolor(BLACK);
 	setfillstyle(SOLID_FILL,0);
-	fillpoly(4,arr3);
-/*	
-	while(1){
-		for(i=0;i<2;i++){
-			delay(50);
-			setcolor(YELLOW);
-			setfillstyle(SOLID_FILL,14);
-			fillellipse(34,31,10,10);
-			if(i==0){			
-				setcolor(BLACK);
-				setfillstyle(SOLID_FILL,0);
-				fillpoly(4,arr2);		
-			}
-			if(i==1){			
-				setcolor(BLACK);
-				setfillstyle(SOLID_FILL,0);
-				fillpoly(4,arr3);		
-			}		
-		}
-		for(i=0;i<2;i++){
-			delay(50);
-			setcolor(YELLOW);
-			setfillstyle(SOLID_FILL,14);
-			fillellipse(34,31,10,10);
-			if(i==0){			
-				setcolor(BLACK);
-				setfillstyle(SOLID_FILL,0);
-				fillpoly(4,arr2);		
-			}
-			if(i==1){			
-				setcolor(BLACK);
-				setfillstyle(SOLID_FILL,0);
-				fillpoly(4,arr1);		
-			}			
-		}
-		
-		
-	}*/
+	fillpoly(4,arr1);
+	setcolor(YELLOW);
+	settextstyle(font, direction, font_size);
+	outtextxy(5,ROW-15,"SCORE:");
+	sprintf(scoreChar,"%d",score);
+	outtextxy(85,ROW-15,scoreChar);
 	
 	
 	
+	return score-1;
 }
-void pacManMovementRight(int centerX,int centerY){
+void pacManMovementRight(int centerX,int centerY,int toss){
 	int arr1[]={centerX,centerY,centerX+10,centerY-10,centerX+10,centerY+10,centerX,centerY};
 	int arr2[]={centerX,centerY,centerX+10,centerY-5, centerX+10,centerY+5, centerX,centerY};
 	int arr3[]={centerX,centerY,centerX+10,centerY-2, centerX+10,centerY+2, centerX,centerY};
 	int i;
+	if(toss==1){
+		removeLastPlace(centerX,centerY);
+	}
+	else{
+		removeLastPlace(centerX-MOVE,centerY);
+	}
+	
 	setcolor(YELLOW);
 	setfillstyle(SOLID_FILL,14);
 	fillellipse(centerX,centerY,10,10);
@@ -258,7 +293,7 @@ void pacManMovementRight(int centerX,int centerY){
 	fillpoly(4,arr3);
 	
 	for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -271,10 +306,11 @@ void pacManMovementRight(int centerX,int centerY){
 				setcolor(BLACK);
 				setfillstyle(SOLID_FILL,0);
 				fillpoly(4,arr3);		
-			}		
-		}
-		for(i=0;i<2;i++){
-			delay(10);
+			}	
+	}
+	
+	for(i=0;i<2;i++){
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -288,14 +324,21 @@ void pacManMovementRight(int centerX,int centerY){
 				setfillstyle(SOLID_FILL,0);
 				fillpoly(4,arr1);		
 			}			
-		}
+	}
 	
 }
-void pacManMovementLeft(int centerX,int centerY){
+void pacManMovementLeft(int centerX,int centerY,int toss){
 	int arr1[]={centerX,centerY,centerX-10,centerY-10,centerX-10,centerY+10,centerX,centerY};
 	int arr2[]={centerX,centerY,centerX-10,centerY-5, centerX-10,centerY+5, centerX,centerY};
 	int arr3[]={centerX,centerY,centerX-10,centerY-2, centerX-10,centerY+2, centerX,centerY};
 	int i;
+	if(toss==1){
+		removeLastPlace(centerX,centerY);
+	}
+	else{
+		removeLastPlace(centerX+MOVE,centerY);
+	}
+	
 	setcolor(YELLOW);
 	setfillstyle(SOLID_FILL,14);
 	fillellipse(centerX,centerY,10,10);
@@ -337,11 +380,17 @@ void pacManMovementLeft(int centerX,int centerY){
 		}
 	
 }
-void pacManMovementUp(int centerX,int centerY){
+void pacManMovementUp(int centerX,int centerY,int toss){
 	int arr1[]={centerX,centerY,centerX-10,centerY-10, centerX+10,centerY-10,centerX,centerY};
 	int arr2[]={centerX,centerY,centerX-5, centerY-10, centerX+5, centerY-10, centerX,centerY};
 	int arr3[]={centerX,centerY,centerX-2, centerY-10, centerX+2, centerY-10, centerX,centerY};
 	int i;
+	if(toss==1){
+		removeLastPlace(centerX,centerY);
+	}
+	else{
+		removeLastPlace(centerX,centerY+MOVE);
+	}
 	setcolor(YELLOW);
 	setfillstyle(SOLID_FILL,14);
 	fillellipse(centerX,centerY,10,10);
@@ -382,11 +431,17 @@ void pacManMovementUp(int centerX,int centerY){
 		}
 	
 }
-void pacManMovementDown(int centerX,int centerY){
+void pacManMovementDown(int centerX,int centerY,int toss){
 	int arr1[]={centerX,centerY,centerX-10,centerY+10, centerX+10,centerY+10,centerX,centerY};
 	int arr2[]={centerX,centerY,centerX-5, centerY+10, centerX+5, centerY+10, centerX,centerY};
 	int arr3[]={centerX,centerY,centerX-2, centerY+10, centerX+2, centerY+10, centerX,centerY};
 	int i;
+	if(toss==1){
+		removeLastPlace(centerX,centerY);
+	}
+	else{
+		removeLastPlace(centerX,centerY-MOVE);
+	}
 	setcolor(YELLOW);
 	setfillstyle(SOLID_FILL,14);
 	fillellipse(centerX,centerY,10,10);
@@ -427,5 +482,20 @@ void pacManMovementDown(int centerX,int centerY){
 			}			
 		}
 	
+}
+void removeLastPlace(int centerX,int centerY){
+
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	fillellipse(centerX,centerY,10,10);
+}
+void scoreUpdate(int score){
+	char scoreChar[10];
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL,0);
+	bar(80,ROW-20,90,ROW-5);
+	setcolor(YELLOW);
+	sprintf(scoreChar,"%d",score);
+	outtextxy(85,ROW-15,scoreChar);
 }
 
