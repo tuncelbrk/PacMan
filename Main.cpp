@@ -1,12 +1,12 @@
 #include<conio.h>
 #include<graphics.h>
-
+#include <time.h>
+#include <stdlib.h>
 
 
 #define ROW 579
 #define COLUMN 599
 #define MOVE 20
-
 
 
 int initMap();
@@ -17,11 +17,12 @@ void pacManMovementDown(int centerX,int centerY,int toss);
 void removeLastPlace(int centerX,int centerY);
 void scoreUpdate(int score);
 
-int main(){    
+int main(){   
+ 	srand(time(NULL));
 	int x1=21,y1=21,x2=41,y2=41,i;
 	int ek=20;
 	char button,tus;
-	int centerX,centerY;	
+	int centerX,centerY,monsterX=251,monsterY=271;	
 	int destination=4;
 	int toss=0;
 	int score=0;
@@ -29,21 +30,34 @@ int main(){
 	int direction = 0;
 	int font_size = 5; 
 	int c;
+	char ch;
+	int move;
+	bool feed=true;
+	bool keepGoing;
 	score = initMap();
 	
-
-
+	move = 2;
+	button = getch();
+	removeLastPlace(monsterX,monsterY);
+	monsterX=251;
+	monsterY=231;
 	while(1){
 	delay(50);	
-	button = getch();
+	
+	if(kbhit()){
+		ch = getch();
+		if(ch == button){
+			continue;
+		}button = ch;
 		
+	}	
 
 		centerX = (x1+x2)/2;
 		centerY = (y1+y2)/2;
 		switch(button){
 			case 27:
 				exit(0);
-			case 77: //right
+			case 'd': //right
 				if(getpixel(centerX+ek,centerY)!=1){
 					if(getpixel(centerX+ek,centerY)==14){
 						score--;
@@ -57,7 +71,7 @@ int main(){
 				}	
 				destination=0;
 				break;
-			case 75: //left
+			case 'a': //left
 				if(getpixel(centerX-ek,centerY)!=1){
 					if(getpixel(centerX-ek,centerY)==14){
 						score--;
@@ -71,7 +85,7 @@ int main(){
 				}	
 				destination=1;
 				break;				
-			case 72: //up
+			case 'w': //up
 				if(getpixel(centerX,centerY-ek)!=1){
 					if(getpixel(centerX,centerY-ek)==14){
 						score--;
@@ -85,7 +99,7 @@ int main(){
 				}					
 				destination=2;
 				break;
-			case 80: //down
+			case 's': //down
 				if(getpixel(centerX,centerY+ek)!=1){
 					if(getpixel(centerX,centerY+ek)==14){
 						score--;
@@ -103,7 +117,6 @@ int main(){
 		}
 		centerX = (x1+x2)/2;
 		centerY = (y1+y2)/2;
-		
 		switch(destination){
 			case 0: pacManMovementRight(centerX,centerY,toss);break;
 			case 1: pacManMovementLeft(centerX,centerY,toss);break;
@@ -111,6 +124,126 @@ int main(){
 			case 3: pacManMovementDown(centerX,centerY,toss);break;
 			default : break;
 		}
+		
+		
+		/////monster
+		if(keepGoing){
+			removeLastPlace(monsterX,monsterY);
+		}
+		if(feed){	
+			setfillstyle(14,14);
+			fillellipse(monsterX,monsterY,5,5);
+		}
+		
+		
+		switch(move){
+			case 0:
+				if(getpixel(monsterX + MOVE,monsterY)!=1){
+					monsterX = monsterX + MOVE;
+					if(getpixel(monsterX,monsterY)==14){
+						feed = true;
+					}
+					else{
+						feed = false;
+					}
+					
+					
+					setcolor(RED);
+					setfillstyle(SOLID_FILL,4);	//monster shape
+					fillellipse(monsterX,monsterY,10,10);
+					
+					setcolor(WHITE);
+					setfillstyle(SOLID_FILL,1);	//monster eyes
+					fillellipse(monsterX-5,monsterY-5,2,2);
+					fillellipse(monsterX+5,monsterY-5,2,2);
+					keepGoing=true;
+				}
+				else{
+					keepGoing=false;
+				}
+				break;
+			case 1:
+				if(getpixel(monsterX - MOVE,monsterY)!=1){
+					monsterX = monsterX - MOVE;		
+					if(getpixel(monsterX,monsterY)==14){
+						feed = true;
+					}
+					else{
+						feed = false;
+					}
+					
+					
+					setcolor(RED);
+					setfillstyle(SOLID_FILL,4);	//monster shape
+					fillellipse(monsterX,monsterY,10,10);
+					
+					setcolor(WHITE);
+					setfillstyle(SOLID_FILL,1);	//monster eyes
+					fillellipse(monsterX-5,monsterY-5,2,2);
+					fillellipse(monsterX+5,monsterY-5,2,2);
+					keepGoing=true;
+				}
+				else{
+					keepGoing=false;
+				}
+				break;
+			case 2://up
+				if(getpixel(monsterX,monsterY - MOVE)!=1){	
+					monsterY = monsterY - MOVE;		
+					if(getpixel(monsterX,monsterY)==14){
+						feed = true;
+					}
+					else{
+						feed = false;
+					}
+					
+					
+					setcolor(RED);
+					setfillstyle(SOLID_FILL,4);	//monster shape
+					fillellipse(monsterX,monsterY,10,10);
+					
+					setcolor(WHITE);
+					setfillstyle(SOLID_FILL,1);	//monster eyes
+					fillellipse(monsterX-5,monsterY-5,2,2);
+					fillellipse(monsterX+5,monsterY-5,2,2);
+					keepGoing=true;
+				}
+				else{
+					keepGoing=false;
+				}
+				break;
+			case 3:
+				if(getpixel(monsterX,monsterY + MOVE)!=1){
+					
+					monsterY = monsterY + MOVE;
+					if(getpixel(monsterX,monsterY)==14){
+						feed = true;
+					}
+					else{
+						feed = false;
+					}
+					
+					
+					setcolor(RED);
+					setfillstyle(SOLID_FILL,4);	//monster shape
+					fillellipse(monsterX,monsterY,10,10);
+					
+					setcolor(WHITE);
+					setfillstyle(SOLID_FILL,1);	//monster eyes
+					fillellipse(monsterX-5,monsterY-5,2,2);
+					fillellipse(monsterX+5,monsterY-5,2,2);
+					keepGoing=true;
+				}
+				else{
+					keepGoing=false;
+				}
+				break;
+			default:break;
+		}
+		if(!keepGoing){
+			move = rand()%4;
+		}
+
 		destination=4;
 		toss=0;
 		
@@ -119,6 +252,10 @@ int main(){
 		if(score == 0){
 			break;
 		}
+		else if(monsterX==centerX && monsterY==centerY){
+			break;
+		}
+		
 	
 	}
 	cleardevice();
@@ -141,6 +278,7 @@ int initMap(){
 	int direction = 0;
 	int font_size = 2;
 	char scoreChar[10];
+	
 	bar(542,10,552,552);
   	rectangle(542,10,552,552);
   	bar(10,10,20,550);
@@ -257,6 +395,25 @@ int initMap(){
 	setcolor(YELLOW);
 	setfillstyle(SOLID_FILL,14);
 	fillellipse(31,31,10,10);
+	
+	setcolor(RED);
+	setfillstyle(SOLID_FILL,4);	//monster shape
+	fillellipse(251,271,10,10);
+	
+	setcolor(WHITE);
+	setfillstyle(SOLID_FILL,1);	//monster eyes
+	fillellipse(246,266,2,2);
+	fillellipse(256,266,2,2);
+	
+	setcolor(BLACK);
+	rectangle(245,241,247,252);
+	rectangle(247,241,249,252);	
+	rectangle(253,241,255,252);
+	rectangle(255,241,257,252);
+	
+	
+	
+	
 	int arr1[]={34,31,44,21,44,41,34,31};
 	int arr2[]={34,31,44,26,44,36,34,31};
 	int arr3[]={34,31,44,29,44,33,34,31};
@@ -347,7 +504,7 @@ void pacManMovementLeft(int centerX,int centerY,int toss){
 	fillpoly(4,arr3);
 	
 	for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -363,7 +520,7 @@ void pacManMovementLeft(int centerX,int centerY,int toss){
 			}		
 		}
 		for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -398,7 +555,7 @@ void pacManMovementUp(int centerX,int centerY,int toss){
 	setfillstyle(SOLID_FILL,0);
 	fillpoly(4,arr3);
 	for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -414,7 +571,7 @@ void pacManMovementUp(int centerX,int centerY,int toss){
 			}		
 		}
 		for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -450,7 +607,7 @@ void pacManMovementDown(int centerX,int centerY,int toss){
 	fillpoly(4,arr3);
 	
 	for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -466,7 +623,7 @@ void pacManMovementDown(int centerX,int centerY,int toss){
 			}		
 		}
 		for(i=0;i<2;i++){
-			delay(10);
+			delay(20);
 			setcolor(YELLOW);
 			setfillstyle(SOLID_FILL,14);
 			fillellipse(centerX,centerY,10,10);
@@ -498,4 +655,5 @@ void scoreUpdate(int score){
 	sprintf(scoreChar,"%d",score);
 	outtextxy(85,ROW-15,scoreChar);
 }
+
 
